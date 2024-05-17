@@ -6,6 +6,9 @@ const personalizedSchema = new Schema({
         required : true,
         trim : true
     },
+    description : {
+        type : String
+    },
     link : {
         type : String,
     },
