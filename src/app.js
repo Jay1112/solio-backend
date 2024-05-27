@@ -3,6 +3,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
+import authRouter from "./routers/auth.router.js";
+
 const app = express();
 
 // middlewares
@@ -20,6 +22,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Import Routers
+app.use("/api/v1/auth",authRouter);
 
 // Define API for specific Route
 
