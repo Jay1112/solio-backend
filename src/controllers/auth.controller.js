@@ -6,100 +6,91 @@ import { generateOTP, getOTPExpiry } from '../utils/utilityFunctions.js';
 
 // Register new User in Database
 const registerUser = asyncHandler( async ( req, res) => {
-    try{
-        // extract details : username, email, password
-        const { username, email, password } = req.body;
+    // extract details : username, email, password
+    const { username, email, password } = req.body;
 
-        // check all required fields are present or not
-        const isAnyEmptyField = [username,email,password].some((field) => {
-            const trimmed = field.trim();
-            return trimmed === '';
-        });
-        if(isAnyEmptyField){
-            throw new ApiError(400,"All Fields are required!");
-        }
-
-        // User already exists or not based on email and username
-        const existedOne = await User.findOne({ $or : [ { username }, { email } ] });
-        if(existedOne){
-            throw new ApiError(409,"User Already Exists!");
-        }
-
-        // generate OTP
-        const otp = generateOTP();
-        const otpExpiry = getOTPExpiry();
-
-        // send OTP on email
-        /* TO DO */
-
-        // create user in db
-        const user = await User.create({
-            username : username?.toLowerCase(),
-            email,
-            password,
-            otp,
-            otpExpiry
-        });
-
-        const createdUser = await User.findById(user._id).select(
-            "-password -refreshToken -otp -otpExpiry"
-        );
-
-        res.status(200).json(
-            new ApiResponse(200,createdUser, "User Registered Successfully!")
-        );
-    }catch(error){
-        throw new ApiError(500,"Something went wrong while registering User...", error);
+    // check all required fields are present or not
+    const isAnyEmptyField = [username,email,password].some((field) => {
+        const trimmed = field?.trim();
+        return trimmed === '';
+    });
+    if(isAnyEmptyField){
+        throw new ApiError(400,"All Fields are required!");
     }
+
+    // User already exists or not based on email and username
+    const existedOne = await User.findOne({ $or : [ { username }, { email } ] });
+    if(existedOne){
+        throw new ApiError(409,"User Already Exists!");
+    }
+
+    // generate OTP
+    const otp = generateOTP();
+    const otpExpiry = getOTPExpiry();
+
+    // send OTP on email
+    /* TO DO */
+
+    // create user in db
+    const user = await User.create({
+        username : username?.toLowerCase(),
+        email,
+        password,
+        otp,
+        otpExpiry
+    });
+
+    const createdUser = await User.findById(user._id).select(
+        "-password -refreshToken -otp -otpExpiry"
+    );
+
+    res.status(200).json(
+        new ApiResponse(200,createdUser, "User Registered Successfully!")
+    );
 });
 
 // Request for New OTP
 const regenerateOTP = asyncHandler( async ( req, res) => {
-    try {
-        const { email, username } = req.body ;
+    const { email, username } = req.body ;
 
-        if(!email && !username){
-            throw new ApiError(400,"email or username is required to verify user.");
-        }
-
-        const user = await User.findOne({ $or : [ { username }, { email } ] });
-        if(!user){
-            throw new ApiError(409,"User Not Found");
-        }
-
-        // generate OTP
-        const otp = generateOTP();
-        const otpExpiry = getOTPExpiry();
-
-        // send OTP on email
-        /* TO DO */
-
-        const updatedUser = await User.findByIdAndUpdate(
-            user._id,
-            {
-                $set : {
-                    otp : otp,
-                    otpExpiry : otpExpiry,
-                }
-            },
-            {
-                new  : true
-            }
-        ).select(
-            "-password -refreshToken -otp -otpExpiry"
-        );
-
-        res.status(200).json(
-            new ApiResponse(
-                200,
-                updatedUser,
-                "New OTP Successfully Generated!!"
-            )
-        );
-
-    } catch (error) {
-        throw new ApiError(500,"Something went wrong while regenerating OTP");
+    if(!email && !username){
+        throw new ApiError(400,"email or username is required to verify user.");
     }
+
+    const user = await User.findOne({ $or : [ { username }, { email } ] });
+    if(!user){
+        throw new ApiError(409,"User Not Found");
+    }
+
+    // generate OTP
+    const otp = generateOTP();
+    const otpExpiry = getOTPExpiry();
+
+    // send OTP on email
+    /* TO DO */
+
+    const updatedUser = await User.findByIdAndUpdate(
+        user._id,
+        {
+            $set : {
+                otp : otp,
+                otpExpiry : otpExpiry,
+            }
+        },
+        {
+            new  : true
+        }
+    ).select(
+        "-password -refreshToken -otp -otpExpiry"
+    );
+
+    res.status(200).json(
+        new ApiResponse(
+            200,
+            updatedUser,
+            "New OTP Successfully Generated!!"
+        )
+    );
 });
 
 // Verify User using OTP
@@ -180,5 +171,6 @@ const userVerification = asyncHandler( async (req, res) => {
 
 export {
     registerUser,
-    userVerification
+    userVerification,
+    regenerateOTP
 }
