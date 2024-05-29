@@ -264,9 +264,31 @@ const loginUser = asyncHandler( async ( req, res ) => {
 });
 
 // logout User
-// const logoutUser = asyncHandler( async ( req, res) => {
+const logoutUser = asyncHandler( async ( req, res) => {
+    const updatedUser = await User.findByIdAndUpdate(req?.user?._id,
+        {
+            $set : {
+                refreshToken : ''
+            }
+        },
+        {
+            new : true
+        }
+    );
 
-// });
+    const options = {
+        httpOnly : true,
+        secure : true
+    };
+
+    res
+    .status(200)
+    .clearCookie("accessToken",options)
+    .clearCookie("refreshToken",options)
+    .json(
+        new ApiResponse(200,{},"User LoggedOut Successfully")
+    )
+});
 
 // get user details
 // const getUserDetails = asyncHandler( async ( req, res) => {
@@ -279,5 +301,6 @@ export {
     registerUser,
     userVerification,
     regenerateOTP,
-    loginUser
+    loginUser,
+    logoutUser
 }
