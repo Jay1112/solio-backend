@@ -263,6 +263,16 @@ const loginUser = asyncHandler( async ( req, res ) => {
     }
 });
 
+// logout User
+// const logoutUser = asyncHandler( async ( req, res) => {
+
+// });
+
+// get user details
+// const getUserDetails = asyncHandler( async ( req, res) => {
+
+// });
+
 
 
 export {
