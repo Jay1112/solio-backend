@@ -9,5 +9,7 @@
 7.  LogIn API                                    Done
 8.  Verify OTP API                               Done
 9.  Regenerate OTP API                           Done
-10. Logout API
-11. Get User Details API
+10. Middleware                                   Done 
+11. Logout API                                   Done
+12. Get User Details API
+13. Send OTP via email Integration                             

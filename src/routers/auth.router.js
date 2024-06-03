@@ -4,7 +4,8 @@ import {
     userVerification, 
     regenerateOTP, 
     loginUser, 
-    logoutUser 
+    logoutUser,
+    getUserDetails 
 } from '../controllers/auth.controller.js';
 import { verifySession } from '../middlewares/auth.middleware.js';
 
@@ -17,5 +18,6 @@ authRouter.route("/login").post(loginUser);
 
 // secure routes
 authRouter.route("/logout").post(verifySession,logoutUser);
+authRouter.route("/user-details").get(verifySession,getUserDetails);
 
 export default authRouter;
