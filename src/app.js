@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
 import authRouter from "./routers/auth.router.js";
+import userRouter from "./routers/user.router.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 // Import Routers
 app.use("/api/v1/auth",authRouter);
+app.use("/api/v1/user",userRouter);
 
 // Define API for specific Route
 
