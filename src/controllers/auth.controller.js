@@ -39,7 +39,12 @@ const registerUser = asyncHandler( async ( req, res) => {
         return trimmed === '';
     });
     if(isAnyEmptyField){
-        throw new ApiError(400,"All Fields are required!");
+        res
+        .status(400)
+        .json(
+            new ApiError(400,"All Fields are required!")
+        )
+        throw new Error("All Fields are required!");
     }
 
     // User already exists or not based on email and username
