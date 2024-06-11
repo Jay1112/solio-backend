@@ -44,13 +44,18 @@ const registerUser = asyncHandler( async ( req, res) => {
         .json(
             new ApiError(400,"All Fields are required!")
         )
-        throw new Error("All Fields are required!");
+        return ;
     }
 
     // User already exists or not based on email and username
     const existedOne = await User.findOne({ $or : [ { username }, { email } ] });
     if(existedOne){
-        throw new ApiError(409,"User Already Exists!");
+        res
+        .status(400)
+        .json(
+            new ApiError(400,"User already exists!")
+        )
+        return ;
     }
 
     // generate OTP
