@@ -39,23 +39,21 @@ const registerUser = asyncHandler( async ( req, res) => {
         return trimmed === '';
     });
     if(isAnyEmptyField){
-        res
+        return res
         .status(400)
         .json(
             new ApiError(400,"All Fields are required!")
         )
-        return ;
     }
 
     // User already exists or not based on email and username
     const existedOne = await User.findOne({ $or : [ { username }, { email } ] });
     if(existedOne){
-        res
+        return res
         .status(400)
         .json(
             new ApiError(400,"User already exists!")
         )
-        return ;
     }
 
     // generate OTP
@@ -129,75 +127,79 @@ const regenerateOTP = asyncHandler( async ( req, res) => {
 
 // Verify User using OTP
 const userVerification = asyncHandler( async (req, res) => {
-    try{
-        const { email, username, otp } = req.body ;
+    const { email, username, otp } = req.body ;
 
-        if(!email && !username){
-            throw new ApiError(400,"email or username is required to verify user.");
-        }
+    if(!email && !username){
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"email or username is required to verify user.")
+        )
+    }
 
-        if(!otp){
-            throw new ApiError(400,"OTP is required to verify user.");
-        }
+    if(!otp){
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"OTP is required to verify user.")
+        )
+    }
 
-        const user = await User.findOne({ $or : [ { username }, { email } ] });
-        if(!user){
-            throw new ApiError(409,"User Not Found");
-        }
+    const user = await User.findOne({ $or : [ { username }, { email } ] });
+    if(!user){
+        throw new ApiError(409,"User Not Found");
+    }
 
-        const currentTime = Date.now();
-        if(user.otp === otp && currentTime <= user.otpExpiry ){
-            const updatedUser = await User.findByIdAndUpdate(
-                user._id,
-                {
-                    $set : {
-                        otp : null,
-                        otpExpiry : null,
-                        verified : true
-                    }
-                },
-                {
-                    new  : true
+    const currentTime = Date.now();
+    if(user.otp === otp && currentTime <= user.otpExpiry ){
+        const updatedUser = await User.findByIdAndUpdate(
+            user._id,
+            {
+                $set : {
+                    otp : null,
+                    otpExpiry : null,
+                    verified : true
                 }
-            ).select(
-                "-password -refreshToken -otp -otpExpiry"
-            );
-            
-            res.status(200).json(
-                new ApiResponse(
-                    200,
-                    updatedUser,
-                    "OTP Successfully Verified"
-                )
-            );
+            },
+            {
+                new  : true
+            }
+        ).select(
+            "-password -refreshToken -otp -otpExpiry"
+        );
+        
+        res.status(200).json(
+            new ApiResponse(
+                200,
+                updatedUser,
+                "OTP Successfully Verified"
+            )
+        );
 
-        }else if(user.otp !== otp){
-            res.status(400).json(
-                new ApiResponse(
-                    400,
-                    null,
-                    "Invalid OTP!"
-                )
-            );
-        }else if(currentTime > user.otpExpiry){
-            res.status(400).json(
-                new ApiResponse(
-                    400,
-                    null,
-                    "OTP is expired! Try to create new one"
-                )
-            );
-        }else{
-            res.status(400).json(
-                new ApiResponse(
-                    400,
-                    null,
-                    "Something went wrong while validating OTP"
-                )
-            );
-        }
-    }catch(error){
-        throw new ApiError(500,"Something went wrong while verifing User...", error);
+    }else if(user.otp !== otp){
+        res.status(400).json(
+            new ApiResponse(
+                400,
+                null,
+                "Invalid OTP!"
+            )
+        );
+    }else if(currentTime > user.otpExpiry){
+        res.status(400).json(
+            new ApiResponse(
+                400,
+                null,
+                "OTP is expired! Try to create new one"
+            )
+        );
+    }else{
+        res.status(400).json(
+            new ApiResponse(
+                400,
+                null,
+                "Something went wrong while validating OTP"
+            )
+        );
     }
 });
 
