@@ -20,12 +20,14 @@ const generateAccessAndRefreshToken = async (userId) => {
             refreshToken,
             accessToken
         }
-     }else{
-        return null;
      }
    } catch (error) {
-        throw new ApiError(500,"Something went wrong while generating access and refresh token...");
+        console.log("Something went wrong while generating access and refresh token...",error);
    }
+    return { 
+        refreshToken : null,
+        accessToken  :null
+    };
 }
 
 // Register new User in Database
@@ -209,19 +211,31 @@ const loginUser = asyncHandler( async ( req, res ) => {
     const { email, password } = req.body ;
 
     if(!email || !password){
-        throw new ApiError(400,"email and password are required to login");
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"email and password both are required to do sign-in.")
+        )
     }
 
     // fetch user details from database
     const user = await User.findOne({ email });
     if(!user){
-        throw new ApiError(400,"User does not exist!");
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"User does not exist!")
+        )
     }
 
     // check whether the password is correct or not
     const isPasswordCorrect = await user.isPasswordCorrect(password);
     if(!isPasswordCorrect){
-        throw new ApiError(400,"Wrong Password");
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"Invalid Credentials")
+        )
     }
 
     // User is verified or not
@@ -256,14 +270,23 @@ const loginUser = asyncHandler( async ( req, res ) => {
     }else{
         const { refreshToken, accessToken } = await generateAccessAndRefreshToken(user._id);
 
+        if(!refreshToken || !accessToken){
+            return res
+            .status(400)
+            .json(
+                new ApiError(400,"Something Went Wrong while creating accessToken and refreshToken")
+            )
+        }
+
         const loggedInUser = await User.findById(user._id).select(
             "-password -refreshToken -otp -otpExpiry"
         );
 
         const options = {
-            httpOnly : true,
-            secure : true
-        }
+            httpOnly: false,  // Should be true for security purposes
+            secure: false,   // Set to false if you are testing over HTTP, true for HTTPS
+            path: '/'        // Ensure cookies are available site-wide
+        };
 
         return res
         .status(200)

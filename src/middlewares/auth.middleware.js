@@ -5,8 +5,13 @@ import jwt from 'jsonwebtoken';
 
 export const verifySession = asyncHandler( async (req, res, next) => {
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","");
+    console.log(req.cookies);
     if(!token){
-        throw new ApiError(401,"Unauthorized Request!");
+        return res
+        .status(401)
+        .json(
+            new ApiError(401,"Unauthorized request!")
+        )
     }
 
     const decodedToken = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);
@@ -16,7 +21,11 @@ export const verifySession = asyncHandler( async (req, res, next) => {
     );
 
     if(!user){
-        throw new ApiError(400,"Invalid Access Token");
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"Invalid Access Token")
+        )
     }
 
     req.user = user ;
