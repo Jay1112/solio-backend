@@ -3,6 +3,9 @@ import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { User } from '../models/user.model.js';
 import { generateOTP, getOTPExpiry } from '../utils/utilityFunctions.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // generate Refresh And Access Token
 const generateAccessAndRefreshToken = async (userId) => {
@@ -283,8 +286,8 @@ const loginUser = asyncHandler( async ( req, res ) => {
         );
 
         const options = {
-            httpOnly: false,  // Should be true for security purposes
-            secure: false,   // Set to false if you are testing over HTTP, true for HTTPS
+            httpOnly: process.env.APP_ENV === 'production' ? true : false,  // Should be true for security purposes
+            secure: process.env.APP_ENV === 'production' ? true : false,   // Set to false if you are testing over HTTP, true for HTTPS
             path: '/'        // Ensure cookies are available site-wide
         };
 
