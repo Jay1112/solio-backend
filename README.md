@@ -11,5 +11,6 @@
 9.  Regenerate OTP API                           Done
 10. Middleware                                   Done 
 11. Logout API                                   Done
-12. Get User Details API
-13. Send OTP via email Integration                             
+12. Get User Details API                         Done
+13. User Dashboard APIs Development
+14. Send OTP via email Integration                             
