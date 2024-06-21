@@ -9,6 +9,6 @@ const userRouter = express.Router();
 
 // secure routes
 userRouter.route("/details").get(verifySession,getUserDetails);
-userRouter.route("/personal-info").get(verifySession,updateDashBoardDetails);
+userRouter.route("/personal-info").post(verifySession,updateDashBoardDetails);
 
 export default userRouter;

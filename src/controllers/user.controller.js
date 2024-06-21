@@ -35,7 +35,12 @@ const updateDashBoardDetails = asyncHandler( async (req, res) => {
 
     const { fullname, location, description } = req.body ;
 
-    const isAnyEmptyFieldMissing = [fullname, location, description].some((field) => field?.trim() === '');
+    const isAnyEmptyFieldMissing = [fullname, location, description].some((field) => {
+        if(!field){
+            return true;
+        }
+        return false;
+    });
     if(isAnyEmptyFieldMissing){
         return res
         .status(400)
