@@ -91,12 +91,20 @@ const regenerateOTP = asyncHandler( async ( req, res) => {
     const { email, username } = req.body ;
 
     if(!email && !username){
-        throw new ApiError(400,"email or username is required to verify user.");
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"email or username is required to verify user.")
+        )
     }
 
     const user = await User.findOne({ $or : [ { username }, { email } ] });
     if(!user){
-        throw new ApiError(409,"User Not Found");
+        return res
+        .status(400)
+        .json(
+            new ApiError(409,"User Not Found")
+        )
     }
 
     // generate OTP
@@ -152,7 +160,11 @@ const userVerification = asyncHandler( async (req, res) => {
 
     const user = await User.findOne({ $or : [ { username }, { email } ] });
     if(!user){
-        throw new ApiError(409,"User Not Found");
+        return res
+        .status(400)
+        .json(
+            new ApiError(409,"User not found")
+        )
     }
 
     const currentTime = Date.now();
@@ -315,7 +327,11 @@ const logoutUser = asyncHandler( async ( req, res) => {
     );
 
     if(!updatedUser){
-        throw new ApiError(404,"user does not found");
+        return res
+        .status(404)
+        .json(
+            new ApiError(404,"User Does not found")
+        )
     }
 
     const options = {
