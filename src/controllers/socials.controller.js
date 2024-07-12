@@ -4,6 +4,7 @@ import { ApiResponse } from '../utils/ApiResponse.js';
 import { Platform } from '../models/platform.model.js';
 import { Social } from '../models/social.model.js';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -38,10 +39,52 @@ const getSocialPlatforms = asyncHandler( async (req, res) => {
     .json(
         new ApiResponse(200,{platforms},"Platforms Fetched Successfully!")
     )
-
 });
+
+const createNewSocialForUser = asyncHandler( async (req, res) => {
+    const { platformId, link, order } = req.body ;
+
+    const newSocial = await Social.create({
+        platform : platformId,
+        link,
+        order,
+        user : req.user?._id
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200,{},"Your Social has been created!")
+    )
+});
+
+const getUserRelatedPlatforms = asyncHandler( async (req, res) => {
+    const allSocials = await Social.aggregate([
+        {
+            $match : {
+                user : new mongoose.Types.ObjectId(req.user._id)
+            }
+        },
+        {
+            $lookup : {
+                from : "platforms",
+                localField: "platform",
+                foreignField: "_id",
+                as: "platform",
+            }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200,{ userPlatforms : allSocials},"Social Platforms fetched Successfully !")
+    )
+});
+
+// update specific platform
+// delete specofic platform
+// save the ordering of the platform list 
 
 export {
     createSocialPlatform,
-    getSocialPlatforms
+    getSocialPlatforms,
+    createNewSocialForUser,
+    getUserRelatedPlatforms
 }

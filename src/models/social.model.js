@@ -8,7 +8,8 @@ const socialSchema = new Schema({
     },
     platform : {
         type : Schema.Types.ObjectId,
-        ref : "Platform"
+        ref : "Platform",
+        required : true
     },
     order : {
         type : Number,
@@ -16,7 +17,8 @@ const socialSchema = new Schema({
     },
     user : {
         type : Schema.Types.ObjectId,
-        ref : "User"
+        ref : "User",
+        required : true
     }
 }, { timestamps : true });
 
