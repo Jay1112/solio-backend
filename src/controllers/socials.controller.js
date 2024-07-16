@@ -70,6 +70,14 @@ const getUserRelatedPlatforms = asyncHandler( async (req, res) => {
                 foreignField: "_id",
                 as: "platform",
             }
+        },
+        {
+            $project : {
+                _id : 1,
+                link : 1,
+                platform : 1,
+                order : 1
+            }
         }
     ]);
 
@@ -79,6 +87,29 @@ const getUserRelatedPlatforms = asyncHandler( async (req, res) => {
 });
 
 // update specific platform
+const updateSocialPlatform = asyncHandler( async (req, res) => {
+    const { socialId , link } = req.body ;
+    const social = await Social.findByIdAndUpdate(
+        socialId,
+        {
+            $set : {
+                link : link
+            }
+        },
+        {
+            new  : true
+        }
+    ).select(
+        "-user"
+    );
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200,social,"Social Updated Successfully!")
+        )
+});
+
 // delete specofic platform
 // save the ordering of the platform list 
 
@@ -86,5 +117,6 @@ export {
     createSocialPlatform,
     getSocialPlatforms,
     createNewSocialForUser,
-    getUserRelatedPlatforms
+    getUserRelatedPlatforms,
+    updateSocialPlatform
 }
