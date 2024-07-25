@@ -168,7 +168,8 @@ const userVerification = asyncHandler( async (req, res) => {
     }
 
     const currentTime = Date.now();
-    if(user.otp === otp && currentTime <= user.otpExpiry ){
+    const userOtp = `${user.otp}`;
+    if(userOtp === otp && currentTime <= user.otpExpiry ){
         const updatedUser = await User.findByIdAndUpdate(
             user._id,
             {
@@ -193,7 +194,7 @@ const userVerification = asyncHandler( async (req, res) => {
             )
         );
 
-    }else if(user.otp !== otp){
+    }else if(userOtp !== otp){
         res.status(400).json(
             new ApiResponse(
                 400,
