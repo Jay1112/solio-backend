@@ -42,12 +42,24 @@ const getSocialPlatforms = asyncHandler( async (req, res) => {
 });
 
 const createNewSocialForUser = asyncHandler( async (req, res) => {
-    const { platformId, link, order } = req.body ;
+    const { platformId, link } = req.body ;
+
+    // check all required fields are present or not
+    const isAnyEmptyField = [platformId,link].some((field) => {
+        const trimmed = field?.trim();
+        return trimmed === '';
+    });
+    if(isAnyEmptyField){
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"All Fields are required!")
+        )
+    }
 
     const newSocial = await Social.create({
         platform : platformId,
         link,
-        order,
         user : req.user?._id
     });
 
