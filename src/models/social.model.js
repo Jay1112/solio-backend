@@ -13,7 +13,7 @@ const socialSchema = new Schema({
     },
     order : {
         type : Number,
-        required : true,
+        required : false,
     },
     user : {
         type : Schema.Types.ObjectId,

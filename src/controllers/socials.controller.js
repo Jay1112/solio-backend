@@ -72,6 +72,12 @@ const getUserRelatedPlatforms = asyncHandler( async (req, res) => {
             }
         },
         {
+            $unwind: {
+                path: "$platform",
+                preserveNullAndEmptyArrays: true // Use this if you want to keep documents without platform data
+            }
+        },
+        {
             $project : {
                 _id : 1,
                 link : 1,
