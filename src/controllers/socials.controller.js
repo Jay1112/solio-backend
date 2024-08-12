@@ -107,6 +107,19 @@ const getUserRelatedPlatforms = asyncHandler( async (req, res) => {
 // update specific platform
 const updateSocialPlatform = asyncHandler( async (req, res) => {
     const { platformId ,socialId , link } = req.body ;
+
+    // check all required fields are present or not
+    const isAnyEmptyField = [platformId,link, socialId].some((field) => {
+        return field ? false : true
+    });
+    if(isAnyEmptyField){
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"All Fields are required!")
+        )
+    }
+
     const social = await Social.findByIdAndUpdate(
         socialId,
         {
@@ -122,8 +135,6 @@ const updateSocialPlatform = asyncHandler( async (req, res) => {
         "-user"
     );
 
-    console.log(social);
-
     return res
         .status(200)
         .json(
@@ -132,6 +143,28 @@ const updateSocialPlatform = asyncHandler( async (req, res) => {
 });
 
 // delete specofic platform
+const deleteUserSocial = asyncHandler( async (req, res) => {
+    const { socialId } = req.body ;
+
+    // check all required fields are present or not
+    const isAnyEmptyField = [socialId].some((field) => {
+        return field ? false : true;
+    });
+    if(isAnyEmptyField){
+        return res
+        .status(400)
+        .json(
+            new ApiError(400,"All Fields are required!")
+        )
+    }
+
+    const result = await Social.deleteOne({ _id : socialId });
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200,{},"Social Successfully Deleted!")
+        )
+});
 // save the ordering of the platform list 
 
 export {
@@ -139,5 +172,6 @@ export {
     getSocialPlatforms,
     createNewSocialForUser,
     getUserRelatedPlatforms,
-    updateSocialPlatform
+    updateSocialPlatform,
+    deleteUserSocial
 }

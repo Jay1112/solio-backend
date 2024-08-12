@@ -4,7 +4,8 @@ import {
     getSocialPlatforms,
     createNewSocialForUser,
     getUserRelatedPlatforms,
-    updateSocialPlatform
+    updateSocialPlatform,
+    deleteUserSocial
 } from '../controllers/socials.controller.js';
 import { verifySession } from '../middlewares/auth.middleware.js';
 
@@ -16,5 +17,6 @@ socialsRouter.route("/platforms").get(verifySession,getSocialPlatforms);
 socialsRouter.route("/create").post(verifySession,createNewSocialForUser);
 socialsRouter.route("/user-platforms").get(verifySession,getUserRelatedPlatforms);
 socialsRouter.route("/update-social").post(verifySession,updateSocialPlatform);
+socialsRouter.route("/delete-social").post(verifySession,deleteUserSocial);
 
 export default socialsRouter;
