@@ -106,12 +106,13 @@ const getUserRelatedPlatforms = asyncHandler( async (req, res) => {
 
 // update specific platform
 const updateSocialPlatform = asyncHandler( async (req, res) => {
-    const { socialId , link } = req.body ;
+    const { platformId ,socialId , link } = req.body ;
     const social = await Social.findByIdAndUpdate(
         socialId,
         {
             $set : {
-                link : link
+                link : link,
+                platform : platformId
             }
         },
         {
@@ -120,6 +121,8 @@ const updateSocialPlatform = asyncHandler( async (req, res) => {
     ).select(
         "-user"
     );
+
+    console.log(social);
 
     return res
         .status(200)
