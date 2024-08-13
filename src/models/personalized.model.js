@@ -1,24 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
 const personalizedSchema = new Schema({
-    name : {
+    type : {
         type : String,
-        required : true,
-        trim : true
+        required : true
     },
-    description : {
-        type : String
-    },
-    link : {
-        type : String,
-    },
-    linkIcon : {
-        type : String,
-        trim : true
-    },
-    order : {
-        type : Number,
-        required : true,
+    customData: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {},
     },
     user : {
         type : Schema.Types.ObjectId,
