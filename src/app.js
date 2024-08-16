@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routers/auth.router.js";
 import userRouter from "./routers/user.router.js";
 import socialsRouter from "./routers/socials.router.js";
+import personalizedRouter from "./routers/personalized.router.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/socials",socialsRouter);
+app.use("/api/v1/personalize",personalizedRouter);
 
 // Define API for specific Route
 
