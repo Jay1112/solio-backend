@@ -1,7 +1,9 @@
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
+import { ApiError } from '../utils/ApiError.js';
 import { Personalized } from '../models/personalized.model.js';
 import { personalizedObj } from '../utils/Personalized.js';
+import mongoose from 'mongoose';
 
 const getUserPersonalizedItems = asyncHandler( async ( req, res) => {
     const personalizes = await Personalized.aggregate([
@@ -62,7 +64,7 @@ const createUserPersonalized = asyncHandler( async ( req, res) => {
 });
 
 const updateUserPersonalized = asyncHandler( async ( req, res) => {
-    const { personalizedId ,type, personalizedData } = req.body ;
+    const { personalizedId , type , personalizedData } = req.body ;
 
     // check all required fields are present or not
     const isAnyEmptyField = [personalizedId, type, personalizedData].some((field) => {
@@ -87,11 +89,11 @@ const updateUserPersonalized = asyncHandler( async ( req, res) => {
     }
 
     const updatedPersonalized = await Personalized.findByIdAndUpdate(
-        req.user?._id,
+        personalizedId,
         {
             $set : {
                 type,
-                customData
+                customData : personalizedData
             }
         },
         {

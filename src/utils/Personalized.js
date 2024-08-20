@@ -12,9 +12,9 @@ class Personalized {
         if(typeof type === 'string'){
             const fields = this.#customTypeMapper[type];
             const valid = fields.some((field)=>{
-                return obj.hasOwnProperty(field) === false;
+                return !obj.hasOwnProperty(field);
             });
-            return valid;
+            return !valid;
         }
         return false;
     }
