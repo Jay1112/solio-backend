@@ -18,6 +18,10 @@ class Personalized {
         }
         return false;
     }
+
+    getAllTypes(){
+        return this.#customTypeMapper.keys();
+    }
 }
 
 const personalizedObj = new Personalized(customObjectMapping);

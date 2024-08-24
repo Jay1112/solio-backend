@@ -140,9 +140,19 @@ const deleteUserPersonalized = asyncHandler( async ( req, res) => {
     );
 });
 
+const getAllPersonalizationTypes = asyncHandler( async ( req, res) => {
+    const types = personalizedObj.getAllTypes();
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(200,types,"Types have been fetched Succssfully")
+        )
+});
+
 export {
     getUserPersonalizedItems,
     createUserPersonalized,
     updateUserPersonalized,
-    deleteUserPersonalized
+    deleteUserPersonalized,
+    getAllPersonalizationTypes
 };

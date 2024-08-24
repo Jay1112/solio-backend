@@ -3,7 +3,8 @@ import {
     getUserPersonalizedItems,
     createUserPersonalized,
     updateUserPersonalized,
-    deleteUserPersonalized
+    deleteUserPersonalized,
+    getAllPersonalizationTypes
 } from '../controllers/personalized.controller.js';
 import { verifySession } from '../middlewares/auth.middleware.js';
 
@@ -14,5 +15,6 @@ personalizedRouter.route("/all").get(verifySession,getUserPersonalizedItems);
 personalizedRouter.route("/create").post(verifySession,createUserPersonalized);
 personalizedRouter.route("/update").post(verifySession,updateUserPersonalized);
 personalizedRouter.route("/delete").post(verifySession,deleteUserPersonalized);
+personalizedRouter.route("/types").post(verifySession,getAllPersonalizationTypes);
 
 export default personalizedRouter;
