@@ -64,7 +64,8 @@ const createUserPersonalized = asyncHandler( async ( req, res) => {
 });
 
 const updateUserPersonalized = asyncHandler( async ( req, res) => {
-    const { personalizedId , type , personalizedData } = req.body ;
+    const personalizedId = req.params['id'];
+    const { type , personalizedData } = req.body ;
 
     // check all required fields are present or not
     const isAnyEmptyField = [personalizedId, type, personalizedData].some((field) => {
@@ -113,7 +114,7 @@ const updateUserPersonalized = asyncHandler( async ( req, res) => {
 });
 
 const deleteUserPersonalized = asyncHandler( async ( req, res) => {
-    const { personalizedId } = req.body ;
+    const personalizedId = req.params['id'];
 
     // check all required fields are present or not
     const isAnyEmptyField = [personalizedId].some((field) => {
