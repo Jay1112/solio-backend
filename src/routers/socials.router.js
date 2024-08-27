@@ -16,7 +16,7 @@ socialsRouter.route("/create-platform").post(createSocialPlatform);
 socialsRouter.route("/platforms").get(verifySession,getSocialPlatforms);
 socialsRouter.route("/create").post(verifySession,createNewSocialForUser);
 socialsRouter.route("/user-platforms").get(verifySession,getUserRelatedPlatforms);
-socialsRouter.route("/update-social").post(verifySession,updateSocialPlatform);
-socialsRouter.route("/delete-social").post(verifySession,deleteUserSocial);
+socialsRouter.route("/update-social/:id").post(verifySession,updateSocialPlatform);
+socialsRouter.route("/delete-social/:id").post(verifySession,deleteUserSocial);
 
 export default socialsRouter;

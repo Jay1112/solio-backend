@@ -106,7 +106,8 @@ const getUserRelatedPlatforms = asyncHandler( async (req, res) => {
 
 // update specific platform
 const updateSocialPlatform = asyncHandler( async (req, res) => {
-    const { platformId ,socialId , link } = req.body ;
+    const socialId = req.params['id'];
+    const { platformId , link } = req.body ;
 
     // check all required fields are present or not
     const isAnyEmptyField = [platformId,link, socialId].some((field) => {
@@ -144,7 +145,7 @@ const updateSocialPlatform = asyncHandler( async (req, res) => {
 
 // delete specofic platform
 const deleteUserSocial = asyncHandler( async (req, res) => {
-    const { socialId } = req.body ;
+    const socialId = req.params['id'];
 
     // check all required fields are present or not
     const isAnyEmptyField = [socialId].some((field) => {
