@@ -15,6 +15,6 @@ personalizedRouter.route("/all").get(verifySession,getUserPersonalizedItems);
 personalizedRouter.route("/create").post(verifySession,createUserPersonalized);
 personalizedRouter.route("/update/:id").post(verifySession,updateUserPersonalized);
 personalizedRouter.route("/delete/:id").post(verifySession,deleteUserPersonalized);
-personalizedRouter.route("/types").post(verifySession,getAllPersonalizationTypes);
+personalizedRouter.route("/types").get(verifySession,getAllPersonalizationTypes);
 
 export default personalizedRouter;

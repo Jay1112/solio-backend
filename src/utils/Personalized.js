@@ -20,7 +20,7 @@ class Personalized {
     }
 
     getAllTypes(){
-        return this.#customTypeMapper.keys();
+        return this.#customTypeMapper;
     }
 }
 
