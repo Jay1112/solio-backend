@@ -7,13 +7,16 @@ import authRouter from "./routers/auth.router.js";
 import userRouter from "./routers/user.router.js";
 import socialsRouter from "./routers/socials.router.js";
 import personalizedRouter from "./routers/personalized.router.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
 // middlewares
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.CORS_DOMAIN,
     credentials: true,
   })
 );
