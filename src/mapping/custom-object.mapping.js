@@ -16,7 +16,6 @@ const customObjectMapping = {
     achievement : [
         'title',
         'description',
-        'image',
         'link'
     ]
 };
