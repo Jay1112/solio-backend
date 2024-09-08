@@ -10,6 +10,7 @@ import { verifySession } from '../middlewares/auth.middleware.js';
 
 const authRouter = express.Router();
 
+authRouter.route("/test-server").get(;
 authRouter.route("/register").post(registerUser);
 authRouter.route("/verify-otp").post(userVerification);
 authRouter.route("/regenerate-otp").post(regenerateOTP);

@@ -13,7 +13,7 @@ const getUserDetails = asyncHandler( async ( req, res) => {
         throw new ApiError(404,"User does not found!!");
     }
 
-    res
+    return res
     .status(200)
     .json(
         new ApiResponse(200,user,"User details fetched successfully!!")

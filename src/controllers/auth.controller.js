@@ -7,6 +7,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const testServer = asyncHandler( async (req ,res) => {
+    return res.status(200).json(
+        new ApiResponse(200,{}, "server testing...")
+    );
+} )
+
 // generate Refresh And Access Token
 const generateAccessAndRefreshToken = async (userId) => {
    try {
@@ -81,7 +87,7 @@ const registerUser = asyncHandler( async ( req, res) => {
         "-password -refreshToken -otp -otpExpiry"
     );
 
-    res.status(200).json(
+    return res.status(200).json(
         new ApiResponse(200,createdUser, "User Registered Successfully!")
     );
 });
@@ -129,7 +135,7 @@ const regenerateOTP = asyncHandler( async ( req, res) => {
         "-password -refreshToken -otp -otpExpiry"
     );
 
-    res.status(200).json(
+    return res.status(200).json(
         new ApiResponse(
             200,
             updatedUser,
@@ -186,7 +192,7 @@ const userVerification = asyncHandler( async (req, res) => {
             "-password -refreshToken -otp -otpExpiry"
         );
         
-        res.status(200).json(
+        return res.status(200).json(
             new ApiResponse(
                 200,
                 updatedUser,
@@ -195,7 +201,7 @@ const userVerification = asyncHandler( async (req, res) => {
         );
 
     }else if(userOtp !== otp){
-        res.status(400).json(
+        return res.status(400).json(
             new ApiResponse(
                 400,
                 null,
@@ -203,7 +209,7 @@ const userVerification = asyncHandler( async (req, res) => {
             )
         );
     }else if(currentTime > user.otpExpiry){
-        res.status(400).json(
+        return res.status(400).json(
             new ApiResponse(
                 400,
                 null,
@@ -211,7 +217,7 @@ const userVerification = asyncHandler( async (req, res) => {
             )
         );
     }else{
-        res.status(400).json(
+        return res.status(400).json(
             new ApiResponse(
                 400,
                 null,
@@ -280,7 +286,7 @@ const loginUser = asyncHandler( async ( req, res ) => {
             "-password -refreshToken -otp -otpExpiry"
         );
 
-        res.status(200).json(
+        return res.status(200).json(
             new ApiResponse(200,updatedUser,"OTP has been sent Successfully!!")
         );
     }else{
@@ -340,7 +346,7 @@ const logoutUser = asyncHandler( async ( req, res) => {
         secure : true
     };
 
-    res
+    return res
     .status(200)
     .clearCookie("accessToken",options)
     .clearCookie("refreshToken",options)
@@ -356,4 +362,5 @@ export {
     regenerateOTP,
     loginUser,
     logoutUser,
+    testServer
 }
